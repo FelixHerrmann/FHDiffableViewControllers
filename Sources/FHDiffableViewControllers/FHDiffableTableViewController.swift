@@ -10,7 +10,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     /// A subclass of **UITableViewDiffableDataSource**, where the section title will be displayed if the snapshot contains more then one section.
     open class FHDataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>  {
-        public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        open override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
             let sectionIdentifiers = snapshot().sectionIdentifiers
             guard let sectionIdenifier = sectionIdentifiers[safe: section], sectionIdentifiers.count > 1 else {
                 return nil
@@ -53,7 +53,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     ///     }
     ///
     /// - important: You need to use a lazy var for it to work properly!
-    public var dataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> {
+    open var dataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> {
         return _dataSource
     }
     
@@ -75,7 +75,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     /// - important: Do not forget to register the reuseable cell before the first snapshot is applied!
     ///
     ///       tableView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
-    public var cellProvider: ((UITableView, IndexPath, ItemIdentifierType) -> UITableViewCell?) {
+    open var cellProvider: ((UITableView, IndexPath, ItemIdentifierType) -> UITableViewCell?) {
         return _cellProvicer
     }
     
@@ -103,7 +103,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     ///   - snapshotData: The data snapshot for the table view.
     ///   - animatingDifferences: A boolean value to deactive the animation. Default value is `true`.
     ///   - completion: The completion block for when the update is finished. Default value is `nil`.
-    public func applySnapshot(_ snapshotData: FHSnapshotData, animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+    open func applySnapshot(_ snapshotData: FHSnapshotData, animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = FHSnapshot()
         
         snapshot.appendSections(snapshotData.map({ $0.sectionIdentifier }))
@@ -117,7 +117,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Overrides
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
