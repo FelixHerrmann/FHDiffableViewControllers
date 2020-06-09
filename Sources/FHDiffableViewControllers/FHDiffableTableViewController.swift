@@ -4,12 +4,12 @@ import UIKit
 import FHExtensions
 
 /// A subclass of **UITableViewController** with diffable data source.
-public class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
+open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
     
     // MARK: - Public Classes
     
     /// A subclass of **UITableViewDiffableDataSource**, where the section title will be displayed if the snapshot contains more then one section.
-    public class FHDataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>  {
+    open class FHDataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>  {
         public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
             let sectionIdentifiers = snapshot().sectionIdentifiers
             guard let sectionIdenifier = sectionIdentifiers[safe: section], sectionIdentifiers.count > 1 else {
