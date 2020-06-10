@@ -6,7 +6,7 @@ import FHExtensions
 /// A subclass of **UITableViewController** with diffable data source.
 open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
     
-    // MARK: - Public Classes
+    // MARK: - Classes
     
     /// A subclass of **UITableViewDiffableDataSource**, where the section title will be displayed if the snapshot contains more then one section.
     open class FHDataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>  {
@@ -22,16 +22,16 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Typealias
     
-    /// A typealias for an **NSDiffableDataSourceSnapshot** type.
+    /// A typealias for **NSDiffableDataSourceSnapshot** type.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for an **FHDiffableDataSourceSnapshotSection** array type.
+    /// A typealias for **FHDiffableDataSourceSnapshotSection** array type.
     public typealias FHSnapshotData = [FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>]
     
     
     // MARK: - Private Properties
     
-    private var _cellProvicer: ((UITableView, IndexPath, ItemIdentifierType) -> UITableViewCell?) = { (tableView, indexPath, itemIdentifier) in
+    private var _cellProvicer: FHDataSource.CellProvider = { (tableView, indexPath, itemIdentifier) in
         let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
         cell.textLabel?.text = "\(itemIdentifier)"
         return cell
@@ -42,9 +42,30 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Public Properties
     
+    /// The cell provider which creates the cells.
+    ///
+    /// Override this property to configure a custom cell.
+    ///
+    /// The default implementation just shows the description in the `textLabel`.
+    ///
+    ///     override var cellProvider: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
+    ///         return { (tableView, indexPath, itemIdentifier) in
+    ///             let cell = tableView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
+    ///             /*customize your cell here*/
+    ///             return cell
+    ///         }
+    ///     }
+    ///
+    /// - important: Do not forget to register the reuseable cell before the first snapshot is applied!
+    ///
+    ///       tableView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
+    open var cellProvider: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
+        return _cellProvicer
+    }
+    
     /// The data source for the table view.
     ///
-    /// Override this property only if you want to apply your custom **UITableViewDiffableDataSource**. For cell configuration overried the `cellProvider` property.
+    /// Override this property only if a custom **UITableViewDiffableDataSource** should be applied. For cell configuration overried the `cellProvider` property.
     ///
     ///     lazy var customDataSource = CustomDataSource(tableView: tableView, cellProvider: cellProvider)
     ///
@@ -57,28 +78,6 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
         return _dataSource
     }
     
-    /// The cell provider which creates the cells.
-    ///
-    /// Override this property to configure your custom cell the way you want.
-    ///
-    /// The default implementation just shows the description in the textLabel.
-    ///
-    ///     override var cellProvider: ((UITableView, IndexPath, ItemIdentifierType) -> UITableViewCell?) {
-    ///         return { (tableView, indexPath, itemIdentifier) in
-    ///             let cell = tableView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
-    ///             cell?.textLabel?.text = itemIdentifier.text
-    ///             /*customize your cell here*/
-    ///             return cell
-    ///         }
-    ///     }
-    ///
-    /// - important: Do not forget to register the reuseable cell before the first snapshot is applied!
-    ///
-    ///       tableView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
-    open var cellProvider: ((UITableView, IndexPath, ItemIdentifierType) -> UITableViewCell?) {
-        return _cellProvicer
-    }
-    
     
     // MARK: - Public Methods
     
@@ -86,7 +85,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     ///
     /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`
     ///
-    /// With the `animatingDifferences`parameter you can disable the updating animation. If you want to have a different one you have to change this property:
+    /// With the `animatingDifferences`parameter the update animation can be disabled. For a different animation this property needs to be modified:
     ///
     ///     dataSource.defaultRowAnimation = .automatic
     ///
@@ -110,7 +109,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
         snapshotData.forEach { (section) in
             snapshot.appendItems(section.itemIdentifiers, toSection: section.sectionIdentifier)
         }
-        dataSource.defaultRowAnimation = .automatic
+        
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
     }
     
