@@ -1,5 +1,3 @@
-#if !os(macOS)
-
 import UIKit
 import FHExtensions
 
@@ -122,5 +120,3 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
     }
 }
-
-#endif

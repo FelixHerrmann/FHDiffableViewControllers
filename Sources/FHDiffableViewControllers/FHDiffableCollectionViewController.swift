@@ -1,5 +1,3 @@
-#if !os(macOS)
-
 import UIKit
 
 /// A subclass of **UICollectionViewController** with diffable data source.
@@ -202,5 +200,3 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "defaultHeader")
     }
 }
-
-#endif

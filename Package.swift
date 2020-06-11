@@ -6,7 +6,6 @@ import PackageDescription
 let package = Package(
     name: "FHDiffableViewControllers",
     platforms: [
-        .macOS(.v10_15),
         .iOS(.v13),
         .tvOS(.v13),
         .watchOS(.v6)
@@ -19,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-         .package(url: "https://github.com/FelixHerrmann/FHExtensions.git", from: "1.1.1"),
+         .package(url: "https://github.com/FelixHerrmann/FHExtensions", from: "1.1.1"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
