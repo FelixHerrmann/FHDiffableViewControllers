@@ -18,7 +18,7 @@ UITableViewController and UICollectionViewController based on a DiffableDataSour
 
 ### [Swift Package Manager](https://swift.org/package-manager/)
 
-Add the following to the dependencies of your `Package.swift:
+Add the following to the dependencies of your `Package.swift`:
 
 ```swift
 .package(url: "https://github.com/FelixHerrmann/FHDiffableViewControllers", from: "x.x.x")
@@ -34,6 +34,8 @@ If you are using Swift Package Manager, you have to import FHDiffableViewControl
 
 Now you can inherit your view controller class from `FHDiffableTableViewController` and `FHDiffableCollectionViewController`. 
 
+<br>
+
 But first we need a `SectionIdentifier` and `ItemIdentifier` which will be used for the generic types. Both types have to conform to `Hashable`.
 
 ```swift
@@ -46,6 +48,8 @@ struct Item: Hashable {
 }
 ```
 >It is recommend to conform the item to `Identifiable` because the app crashes if there are duplicates in the data source!
+
+<br>
 
 These types can be used like that:
 
@@ -74,6 +78,8 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
 ```
 >This is the most simple implementation of a FHDiffableTableViewController.
 
+<br>
+
 ### Customize Cells
 
 In order to use custom cells, the `cellProvider` property must be overritten. This works exactly the same for table view and collection view.
@@ -93,6 +99,8 @@ Do not forget to register the cell bevor you call `applySnapshot(_:)` the first 
 ```swift 
 tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
 ```
+
+<br>
 
 ### Customize Header and Footer Views (only collection view)
 
@@ -118,6 +126,8 @@ Do not forget to register the cell bevor you call `applySnapshot(_:)` the first 
 ```swift
 collectionView.register(CustomHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "customHeader")
 ```
+
+<br>
 
 ### Custom Data Source
 
@@ -148,6 +158,8 @@ override var dataSource: UITableViewDiffableDataSource<Section, Item> {
 }
 ```
 
+<br>
+
 ### Custom `applySnapshot(_:)`
 
 You are not forced to use `applySnapshot(_:)` in combination with `FHDiffableDataSourceSection` array to apply snapshots to your `dataSource`. You can override the `applySnapshot(_:)` to change its behavior, create your own `applySnapshot()` method or do it manually as follows:
@@ -160,9 +172,13 @@ snapshot.appendItems([Item(title: "Detail Item")], toSection: .detail)
 dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
 ```
 
+<br>
+
 ### init(layout:)
 
 I use a custom initializer for the `FHDiffableCollectionViewController` which is based on an enum. This contains a case for `UICollectionViewFlowLayout`, for `UICollectionViewCompositionalLayout`, for a custom `UICollectionViewLayout` or a default case. The default case creates a compositional layout which is only intended to be used for testing.
+
+<br>
 
 ## License
 
