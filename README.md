@@ -78,8 +78,6 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
 ```
 >This is the most simple implementation of a FHDiffableTableViewController.
 
-<br>
-
 ### Customize Cells
 
 In order to use custom cells, the `cellProvider` property must be overritten. This works exactly the same for table view and collection view.
@@ -99,8 +97,6 @@ Do not forget to register the cell bevor you call `applySnapshot(_:)` the first 
 ```swift 
 tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
 ```
-
-<br>
 
 ### Customize Header and Footer Views (only collection view)
 
@@ -126,8 +122,6 @@ Do not forget to register the cell bevor you call `applySnapshot(_:)` the first 
 ```swift
 collectionView.register(CustomHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "customHeader")
 ```
-
-<br>
 
 ### Custom Data Source
 
@@ -158,8 +152,6 @@ override var dataSource: UITableViewDiffableDataSource<Section, Item> {
 }
 ```
 
-<br>
-
 ### Custom `applySnapshot(_:)`
 
 You are not forced to use `applySnapshot(_:)` in combination with `FHDiffableDataSourceSection` array to apply snapshots to your `dataSource`. You can override the `applySnapshot(_:)` to change its behavior, create your own `applySnapshot()` method or do it manually as follows:
@@ -172,13 +164,9 @@ snapshot.appendItems([Item(title: "Detail Item")], toSection: .detail)
 dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
 ```
 
-<br>
-
 ### init(layout:)
 
 I use a custom initializer for the `FHDiffableCollectionViewController` which is based on an enum. This contains a case for `UICollectionViewFlowLayout`, for `UICollectionViewCompositionalLayout`, for a custom `UICollectionViewLayout` or a default case. The default case creates a compositional layout which is only intended to be used for testing.
-
-<br>
 
 ## License
 
