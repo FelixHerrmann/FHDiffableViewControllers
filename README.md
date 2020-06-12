@@ -78,6 +78,17 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
 ```
 >This is the most simple implementation of a FHDiffableTableViewController.
 
+<br>
+
+The cell selection can be implemented like that:
+
+```swift
+override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let item = dataSource.itemIdentifier(for: indexPath)
+    /*do your actions with the selected item*/
+}
+```
+
 ### Customize Cells
 
 In order to use custom cells, the `cellProvider` property must be overritten. This works exactly the same for table view and collection view.
