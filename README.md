@@ -114,7 +114,7 @@ tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
 In order to use custom header or footer views, the `supplementaryViewProvider` property must be overritten.
 
 ```swift 
-override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Section, Item>.SupplementaryViewProvider {
+override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Section, Item>.SupplementaryViewProvider? {
     return { (collectionView, kind, indexPath) in
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "customHeader", for: indexPath) as? CustomHeader
         switch self.dataSource.snapshot().sectionIdentifiers[indexPath.section] {

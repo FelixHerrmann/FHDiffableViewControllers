@@ -121,7 +121,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     ///
     /// The default implementation just shows an empty section header.
     ///
-    ///     override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider {
+    ///     override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
     ///         return { (collectionView, kind, indexPath) in
     ///             let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReuseableView
     ///             /*customize your supplementary view here*/
