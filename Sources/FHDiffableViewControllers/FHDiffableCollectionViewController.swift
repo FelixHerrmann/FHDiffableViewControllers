@@ -132,7 +132,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// - important: Do not forget to register the reuseable view before the first snapshot is applied!
     ///
     ///       collectionView.register(CustomReuseableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
-    open var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider {
+    open var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
         return _supplementaryViewProvider
     }
     
