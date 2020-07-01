@@ -177,7 +177,10 @@ dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
 
 ### init(layout:)
 
-I use a custom initializer for the `FHDiffableCollectionViewController` which is based on an enum. This contains a case for `UICollectionViewFlowLayout`, for `UICollectionViewCompositionalLayout`, for a custom `UICollectionViewLayout` or a default case. The default case creates a compositional layout which is only intended to be used for testing.
+The `FHDiffableCollectionViewController` has a custom initializer, which is based on an enum.
+This contains a case for `UICollectionViewFlowLayout`, for `UICollectionViewCompositionalLayout`, for a custom `UICollectionViewLayout` or a default case.
+
+>The default case creates a compositional layout, which is only intended to be used for testing.
 
 ## License
 
