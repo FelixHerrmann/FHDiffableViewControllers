@@ -12,7 +12,6 @@ UITableViewController and UICollectionViewController based on a DiffableDataSour
 - macOS 10.15+ (Catalyst)
 - iOS 13.0+
 - tvOS 13.0+
-- watchOS 6.0+
 
 ## Installation
 
