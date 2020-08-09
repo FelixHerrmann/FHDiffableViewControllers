@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "FHExtensions",
-        "repositoryURL": "https://github.com/FelixHerrmann/FHExtensions",
+        "repositoryURL": "https://github.com/FelixHerrmann/FHExtensions.git",
         "state": {
           "branch": null,
-          "revision": "76407099b5bc0cf2cfe9cffd2def2121e50b8099",
-          "version": "1.4.2"
+          "revision": "688f13cc442a35e3a0bafc94a18957b532f46c84",
+          "version": "1.5.0"
         }
       }
     ]
