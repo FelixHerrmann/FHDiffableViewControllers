@@ -20,7 +20,7 @@ UITableViewController and UICollectionViewController based on a DiffableDataSour
 Add the following to the dependencies of your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/FelixHerrmann/FHDiffableViewControllers", from: "x.x.x")
+.package(url: "https://github.com/FelixHerrmann/FHDiffableViewControllers.git", from: "x.x.x")
 ```
 
 ### Manual
