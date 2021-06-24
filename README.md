@@ -54,18 +54,19 @@ These types can be used like that:
 
 ```swift
 class ViewController: FHDiffableTableViewController<Section, Item> {
-    override viewDidLoad() {
+    
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         applySnapshot([
-            FHDiffableDataSourceSnapshotSection(
+            FHSection(
                 sectionIdentifier: .main,
                 itemIdentifiers: [
                     Item(title: "First Item"),
                     Item(title: "Second Item")
                 ]
             ),
-            FHDiffableDataSourceSnapshotSection(
+            FHSection(
                 sectionIdentifier: .detail,
                 itemIdentifiers: [
                     Item(title: "Third Item")
@@ -90,7 +91,7 @@ override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: Inde
 
 ### Customize Cells
 
-In order to use custom cells, the `cellProvider` property must be overritten. This works exactly the same for table view and collection view.
+In order to use custom cells, the `cellProvider` property must be overwritten. This works exactly the same for table view and collection view.
 
 ```swift
 override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
@@ -102,7 +103,7 @@ override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProv
 }
 ```
 
-Do not forget to register the cell bevor you call `applySnapshot(_:)` the first time!
+Do not forget to register the cell before you call `applySnapshot(_:)` the first time!
 
 ```swift 
 tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
@@ -110,7 +111,7 @@ tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
 
 ### Customize Header and Footer Views (only collection view)
 
-In order to use custom header or footer views, the `supplementaryViewProvider` property must be overritten.
+In order to use custom header or footer views, the `supplementaryViewProvider` property must be overwritten.
 
 ```swift 
 override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Section, Item>.SupplementaryViewProvider? {
@@ -127,7 +128,7 @@ override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Secti
 }
 ```
 
-Do not forget to register the cell bevor you call `applySnapshot(_:)` the first time!
+Do not forget to register the cell before you call `applySnapshot(_:)` the first time!
 
 ```swift
 collectionView.register(CustomHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "customHeader")
@@ -139,6 +140,7 @@ In case you want to change the behavior of the title creation or you want to use
 
 ```swift
 class CustomDataSource: UITableViewDiffableDataSource<Section, Item> {
+    
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch snapshot().sectionIdentifiers[section] {
         case .main:
