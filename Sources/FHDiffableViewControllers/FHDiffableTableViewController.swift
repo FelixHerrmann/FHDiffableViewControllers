@@ -23,8 +23,8 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     /// A typealias for **NSDiffableDataSourceSnapshot** type.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **FHDiffableDataSourceSnapshotSection** array type.
-    public typealias FHSnapshotData = [FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>]
+    /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
+    public typealias FHSection = FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>
     
     
     // MARK: - Private Properties
@@ -97,14 +97,14 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     ///     }
     ///
     /// - Parameters:
-    ///   - snapshotData: The data snapshot for the table view.
-    ///   - animatingDifferences: A boolean value to deactive the animation. Default value is `true`.
+    ///   - sections: The sections for the table view.
+    ///   - animatingDifferences: A boolean value to deactivate the animation. Default value is `true`.
     ///   - completion: The completion block for when the update is finished. Default value is `nil`.
-    open func applySnapshot(_ snapshotData: FHSnapshotData, animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
+    open func applySnapshot(_ sections: [FHSection], animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = FHSnapshot()
         
-        snapshot.appendSections(snapshotData.map({ $0.sectionIdentifier }))
-        snapshotData.forEach { (section) in
+        snapshot.appendSections(sections.map(\.sectionIdentifier))
+        sections.forEach { (section) in
             snapshot.appendItems(section.itemIdentifiers, toSection: section.sectionIdentifier)
         }
         
