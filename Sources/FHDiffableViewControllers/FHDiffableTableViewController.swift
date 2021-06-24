@@ -12,10 +12,10 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
         
         open override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
             let sectionIdentifiers = snapshot().sectionIdentifiers
-            guard let sectionIdenifier = sectionIdentifiers[safe: section], sectionIdentifiers.count > 1 else {
+            guard let sectionIdentifier = sectionIdentifiers[safe: section], sectionIdentifiers.count > 1 else {
                 return nil
             }
-            return "\(sectionIdenifier)"
+            return "\(sectionIdentifier)"
         }
     }
     
@@ -31,7 +31,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Private Properties
     
-    private var _cellProvicer: FHDataSource.CellProvider = { (tableView, indexPath, itemIdentifier) in
+    private var _cellProvider: FHDataSource.CellProvider = { (tableView, indexPath, itemIdentifier) in
         let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
         cell.textLabel?.text = "\(itemIdentifier)"
         return cell
@@ -58,17 +58,17 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     /// }
     /// ```
     ///
-    /// - Important: Do not forget to register the reuseable cell before the first snapshot is applied!
+    /// - Important: Do not forget to register the reusable cell before the first snapshot is applied!
     ///
     ///       tableView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     open var cellProvider: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-        return _cellProvicer
+        return _cellProvider
     }
     
     /// The data source for the table view.
     ///
     /// Override this property only if a custom **UITableViewDiffableDataSource** should be applied.
-    /// For cell configuration overried the ``cellProvider`` property.
+    /// For cell configuration override the ``cellProvider`` property.
     ///
     /// ```swift
     /// lazy var customDataSource = CustomDataSource(tableView: tableView, cellProvider: cellProvider)
@@ -86,7 +86,7 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Public Methods
     
-    /// This method applys a new snapshot to the table view.
+    /// This method applies a new snapshot to the table view.
     ///
     /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`
     ///

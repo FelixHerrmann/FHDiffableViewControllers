@@ -78,9 +78,9 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     }
     
     private var _supplementaryViewProvider: FHDataSource.SupplementaryViewProvider = { (collectionView, kind, indexPath) in
-        let reuseableHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "defaultHeader", for: indexPath)
-        reuseableHeaderView.backgroundColor = .systemIndigo
-        return reuseableHeaderView
+        let reusableHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "defaultHeader", for: indexPath)
+        reusableHeaderView.backgroundColor = .systemIndigo
+        return reusableHeaderView
     }
     
     private lazy var _dataSource: FHDataSource = {
@@ -108,7 +108,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// }
     /// ```
     ///
-    /// - Important: Do not forget to register the reuseable cell before the first snapshot is applied!
+    /// - Important: Do not forget to register the reusable cell before the first snapshot is applied!
     ///
     ///       collectionView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     open var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
@@ -124,17 +124,17 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// ```swift
     /// override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
     ///     return { (collectionView, kind, indexPath) in
-    ///         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReuseableView
+    ///         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReusableView
     ///         /*customize your supplementary view here*/
     ///         return supplementaryView
     ///     }
     /// }
     /// ```
     ///
-    /// - Important: Do not forget to register the reuseable view before the first snapshot is applied!
+    /// - Important: Do not forget to register the reusable view before the first snapshot is applied!
     ///
     /// ```swift
-    /// collectionView.register(CustomReuseableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
+    /// collectionView.register(CustomReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     /// ```
     open var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
         return _supplementaryViewProvider
@@ -143,7 +143,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// The data source for the collection view.
     ///
     /// Override this property only if a custom **UICollectionViewDiffableDataSource** should be applied.
-    /// For cell configuration overried the ``cellProvider`` property.
+    /// For cell configuration override the ``cellProvider`` property.
     /// For supplementary view configuration override the ``supplementaryViewProvider`` property.
     ///
     /// ```swift
@@ -166,13 +166,13 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     // MARK: - Public Methods
     
-    /// This method applys a new snapshot to the collection view.
+    /// This method applies a new snapshot to the collection view.
     ///
     /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
     ///
     /// - Parameters:
     ///   - sections: The sections for the collection view.
-    ///   - animatingDifferences: A boolean value to deactive the animation. Default value is `true`.
+    ///   - animatingDifferences: A boolean value to deactivate the animation. Default value is `true`.
     ///   - completion: The completion block for when the update is finished. Default value is `nil`.
     open func applySnapshot(_ sections: [FHSection], animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = FHSnapshot()
