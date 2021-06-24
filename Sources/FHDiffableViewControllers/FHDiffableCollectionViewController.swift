@@ -3,6 +3,7 @@ import UIKit
 /// A subclass of **UICollectionViewController** with diffable data source.
 open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentifierType>: UICollectionViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
     
+    
     // MARK: - Enums
     
     /// The type of layout you want to initialize your collection view with.
@@ -19,16 +20,15 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
         
         /// Use your custom **UICollectionViewLayout**.
         case custom(UICollectionViewLayout)
-        
     }
     
     
     // MARK: - Typealias
     
-    /// A typealias for **UICollectionViewDiffableDataSource** type.
+    /// A typealias for **UICollectionViewDiffableDataSource** with the identifier types.
     public typealias FHDataSource = UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **NSDiffableDataSourceSnapshot** type.
+    /// A typealias for **NSDiffableDataSourceSnapshot** with the identifier types.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
     
     /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
@@ -37,12 +37,10 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     // MARK: - Initializers
     
-    /// Initializes a **FHDiffableCollectionViewController** and configures the collection view with the provided layout.
+    /// Initializes a ``FHDiffableCollectionViewController`` and configures the collection view with the provided layout.
     ///
     /// - Parameters:
     ///     - layoutType: The type of layout the collection view should use.
-    ///
-    /// - Returns: An initialized **FHDiffableCollectionViewController** object.
     public init(layout layoutType: LayoutType = .default) {
         switch layoutType {
         case .default:
@@ -100,15 +98,17 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     ///
     /// The default implementation just shows an empty cell.
     ///
-    ///     override var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-    ///         return { (collectionView, indexPath, itemIdentifier) in
-    ///             let cell = collectionView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
-    ///             /*customize your cell here*/
-    ///             return cell
-    ///         }
+    /// ```swift
+    /// override var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
+    ///     return { (collectionView, indexPath, itemIdentifier) in
+    ///         let cell = collectionView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
+    ///         /*customize your cell here*/
+    ///         return cell
     ///     }
+    /// }
+    /// ```
     ///
-    /// - important: Do not forget to register the reuseable cell before the first snapshot is applied!
+    /// - Important: Do not forget to register the reuseable cell before the first snapshot is applied!
     ///
     ///       collectionView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     open var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
@@ -121,17 +121,21 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     ///
     /// The default implementation just shows an empty section header.
     ///
-    ///     override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
-    ///         return { (collectionView, kind, indexPath) in
-    ///             let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReuseableView
-    ///             /*customize your supplementary view here*/
-    ///             return supplementaryView
-    ///         }
+    /// ```swift
+    /// override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
+    ///     return { (collectionView, kind, indexPath) in
+    ///         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReuseableView
+    ///         /*customize your supplementary view here*/
+    ///         return supplementaryView
     ///     }
+    /// }
+    /// ```
     ///
-    /// - important: Do not forget to register the reuseable view before the first snapshot is applied!
+    /// - Important: Do not forget to register the reuseable view before the first snapshot is applied!
     ///
-    ///       collectionView.register(CustomReuseableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
+    /// ```swift
+    /// collectionView.register(CustomReuseableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
+    /// ```
     open var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
         return _supplementaryViewProvider
     }
@@ -139,20 +143,22 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// The data source for the collection view.
     ///
     /// Override this property only if a custom **UICollectionViewDiffableDataSource** should be applied.
-    /// For cell configuration overried the `cellProvider` property.
-    /// For supplementary view configuration override the `supplementaryViewProvider` property.
+    /// For cell configuration overried the ``cellProvider`` property.
+    /// For supplementary view configuration override the ``supplementaryViewProvider`` property.
     ///
-    ///     lazy var customDataSource: CustomDataSource = {
-    ///         let dataSource = CustomDataSource(collectionView: collectionView, cellProvider: cellProvider)
-    ///         dataSource.supplementaryViewProvider = supplementaryViewProvider
-    ///         return dataSource
-    ///     }()
+    /// ```swift
+    /// lazy var customDataSource: CustomDataSource = {
+    ///     let dataSource = CustomDataSource(collectionView: collectionView, cellProvider: cellProvider)
+    ///     dataSource.supplementaryViewProvider = supplementaryViewProvider
+    ///     return dataSource
+    /// }()
     ///
-    ///     override var dataSource: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> {
-    ///         return customDataSource
-    ///     }
+    /// override var dataSource: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> {
+    ///     return customDataSource
+    /// }
+    /// ```
     ///
-    /// - important: You need to use a lazy var for it to work properly!
+    /// - Important: You need to use a lazy var for it to work properly!
     open var dataSource: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> {
         return _dataSource
     }
@@ -162,18 +168,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     /// This method applys a new snapshot to the collection view.
     ///
-    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`
-    ///
-    /// With the `animatingDifferences`parameter the update animation can be disabled.
-    ///
-    /// If you do not want to use **FHSnapshotData** you can write your own `applySnapshot()` method like that:
-    ///
-    ///     func applySnapshot() {
-    ///         var snapshot = FHSnapshot()
-    ///         snapshot.appendSections([/*your sections*/])
-    ///         snapshot.appendItems([/*your items*/], toSection: /*your section*/) // do that for every section
-    ///         dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
-    ///     }
+    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
     ///
     /// - Parameters:
     ///   - sections: The sections for the collection view.
