@@ -70,19 +70,6 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     // MARK: - Private Properties
     
-    private var _cellProvider: FHDataSource.CellProvider = { (collectionView, indexPath, itemIdentifier) in
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "defaultCell", for: indexPath)
-        cell.backgroundColor = .systemTeal
-        cell.layer.cornerRadius = 8
-        return cell
-    }
-    
-    private var _supplementaryViewProvider: FHDataSource.SupplementaryViewProvider = { (collectionView, kind, indexPath) in
-        let reusableHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "defaultHeader", for: indexPath)
-        reusableHeaderView.backgroundColor = .systemIndigo
-        return reusableHeaderView
-    }
-    
     private lazy var _dataSource: FHDataSource = {
         let dataSource = FHDataSource(collectionView: collectionView, cellProvider: cellProvider)
         dataSource.supplementaryViewProvider = supplementaryViewProvider
@@ -96,11 +83,12 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     ///
     /// Override this property to configure a custom cell.
     ///
-    /// The default implementation just shows an empty cell.
+    /// There is no default implemenation for this property.
+    /// It will raise a fatal error if you don't override it like the following:
     ///
     /// ```swift
     /// override var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-    ///     return { (collectionView, indexPath, itemIdentifier) in
+    ///     return { collectionView, indexPath, itemIdentifier in
     ///         let cell = collectionView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
     ///         /*customize your cell here*/
     ///         return cell
@@ -109,21 +97,19 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// ```
     ///
     /// - Important: Do not forget to register the reusable cell before the first snapshot is applied!
-    ///
-    ///       collectionView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     open var cellProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-        return _cellProvider
+        fatalError("Implement the cellProvider in your subclass")
     }
     
     /// The supplementary view provider which creates the supplementary views.
     ///
     /// Override this property to configure a custom supplementary view.
     ///
-    /// The default implementation just shows an empty section header.
+    /// The default implementation returns `nil`.
     ///
     /// ```swift
     /// override var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
-    ///     return { (collectionView, kind, indexPath) in
+    ///     return { collectionView, kind, indexPath in
     ///         let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: /*your identifier*/, for: indexPath) as? CustomReusableView
     ///         /*customize your supplementary view here*/
     ///         return supplementaryView
@@ -132,12 +118,8 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     /// ```
     ///
     /// - Important: Do not forget to register the reusable view before the first snapshot is applied!
-    ///
-    /// ```swift
-    /// collectionView.register(CustomReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
-    /// ```
     open var supplementaryViewProvider: UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.SupplementaryViewProvider? {
-        return _supplementaryViewProvider
+        return nil
     }
     
     /// The data source for the collection view.
@@ -178,20 +160,8 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
         var snapshot = FHSnapshot()
         
         snapshot.appendSections(sections.map(\.sectionIdentifier))
-        sections.forEach { (section) in
-            snapshot.appendItems(section.itemIdentifiers, toSection: section.sectionIdentifier)
-        }
+        sections.forEach { snapshot.appendItems($0.itemIdentifiers, toSection: $0.sectionIdentifier) }
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-    }
-    
-    
-    // MARK: - Overrides
-    
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "defaultCell")
-        collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "defaultHeader")
     }
 }
