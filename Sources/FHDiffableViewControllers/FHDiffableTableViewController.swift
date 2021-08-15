@@ -5,22 +5,10 @@ import FHExtensions
 open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
     
     
-    // MARK: - Classes
-    
-    /// A subclass of **UITableViewDiffableDataSource**, where the section title will be displayed if the snapshot contains more then one section.
-    open class FHDataSource: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>  {
-        
-        open override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-            let sectionIdentifiers = snapshot().sectionIdentifiers
-            guard let sectionIdentifier = sectionIdentifiers[safe: section], sectionIdentifiers.count > 1 else {
-                return nil
-            }
-            return "\(sectionIdentifier)"
-        }
-    }
-    
-    
     // MARK: - Typealias
+    
+    /// A typealias for **UITableViewDiffableDataSource** with the identifier types.
+    public typealias FHDataSource = UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>
     
     /// A typealias for **NSDiffableDataSourceSnapshot** with the identifier types.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
@@ -31,12 +19,6 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     
     // MARK: - Private Properties
     
-    private var _cellProvider: FHDataSource.CellProvider = { (tableView, indexPath, itemIdentifier) in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "default", for: indexPath)
-        cell.textLabel?.text = "\(itemIdentifier)"
-        return cell
-    }
-    
     private lazy var _dataSource: FHDataSource = FHDataSource(tableView: tableView, cellProvider: cellProvider)
     
     
@@ -46,11 +28,12 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     ///
     /// Override this property to configure a custom cell.
     ///
-    /// The default implementation just shows the description in the `textLabel`.
+    /// There is no default implemenation for this property.
+    /// It will raise a fatal error if you don't override it like the following:
     ///
     /// ```swift
     /// override var cellProvider: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-    ///     return { (tableView, indexPath, itemIdentifier) in
+    ///     return { tableView, indexPath, itemIdentifier in
     ///         let cell = tableView.dequeueReusableCell(withIdentifier: /*your identifier*/, for: indexPath) as? CustomCell
     ///         /*customize your cell here*/
     ///         return cell
@@ -59,10 +42,8 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
     /// ```
     ///
     /// - Important: Do not forget to register the reusable cell before the first snapshot is applied!
-    ///
-    ///       tableView.register(CustomCell.self, forCellReuseIdentifier: /*your identifier*/) // e.g. in viewDidLoad()
     open var cellProvider: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>.CellProvider {
-        return _cellProvider
+        fatalError("Implement the cellProvider in your subclass")
     }
     
     /// The data source for the table view.
@@ -104,19 +85,8 @@ open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierTy
         var snapshot = FHSnapshot()
         
         snapshot.appendSections(sections.map(\.sectionIdentifier))
-        sections.forEach { (section) in
-            snapshot.appendItems(section.itemIdentifiers, toSection: section.sectionIdentifier)
-        }
+        sections.forEach { snapshot.appendItems($0.itemIdentifiers, toSection: $0.sectionIdentifier) }
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
-    }
-    
-    
-    // MARK: - Overrides
-    
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "default")
     }
 }
