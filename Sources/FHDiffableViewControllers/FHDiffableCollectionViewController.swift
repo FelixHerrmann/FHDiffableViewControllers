@@ -4,25 +4,6 @@ import UIKit
 open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentifierType>: UICollectionViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
     
     
-    // MARK: - Enums
-    
-    /// The type of layout you want to initialize your collection view with.
-    public enum LayoutType {
-        
-        /// Creates  a default **UICollectionViewCompositionalLayout**. This is intended to be used for test purposes.
-        case `default`
-        
-        /// Use a **UICollectionViewFlowLayout**.
-        case flow(UICollectionViewFlowLayout)
-        
-        /// Use a **UICollectionViewCompositionalLayout**.
-        case compositional(UICollectionViewCompositionalLayout)
-        
-        /// Use your custom **UICollectionViewLayout**.
-        case custom(UICollectionViewLayout)
-    }
-    
-    
     // MARK: - Typealias
     
     /// A typealias for **UICollectionViewDiffableDataSource** with the identifier types.
@@ -33,39 +14,6 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
     public typealias FHSection = FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>
-    
-    
-    // MARK: - Initializers
-    
-    /// Initializes a ``FHDiffableCollectionViewController`` and configures the collection view with the provided layout.
-    ///
-    /// - Parameters:
-    ///     - layoutType: The type of layout the collection view should use.
-    public init(layout layoutType: LayoutType = .default) {
-        switch layoutType {
-        case .default:
-            let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalWidth(1/3)))
-            item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(0)), subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-            let section = NSCollectionLayoutSection(group: group)
-            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(32)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-            headerItem.pinToVisibleBounds = true
-            section.boundarySupplementaryItems = [headerItem]
-            let compositionalLayout = UICollectionViewCompositionalLayout(section: section)
-            super.init(collectionViewLayout: compositionalLayout)
-        case .flow(let flowLayout):
-            super.init(collectionViewLayout: flowLayout)
-        case .compositional(let compositionalLayout):
-            super.init(collectionViewLayout: compositionalLayout)
-        case .custom(let layout):
-            super.init(collectionViewLayout: layout)
-        }
-    }
-    
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
     
     
     // MARK: - Private Properties
