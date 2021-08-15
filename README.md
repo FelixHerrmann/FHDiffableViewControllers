@@ -61,7 +61,7 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
     override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
         return { tableView, indexPath, item in
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell?.textLabel?.text = item.title
+            cell.textLabel?.text = item.title
             return cell
         }
     }
