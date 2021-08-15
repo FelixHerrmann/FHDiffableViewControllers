@@ -8,10 +8,12 @@
 
 UITableViewController and UICollectionViewController based on a DiffableDataSource.
 
+
 ## Requirements
 - macOS 10.15+ (Catalyst)
 - iOS 13.0+
 - tvOS 13.0+
+
 
 ## Installation
 
@@ -26,6 +28,7 @@ Add the following to the dependencies of your `Package.swift`:
 ### Manual
 
 Download the files in the [Sources](https://github.com/FelixHerrmann/FHDiffableViewControllers/tree/master/Sources) folder and drag them into you project.
+
 
 ## Usage
 
@@ -46,17 +49,27 @@ struct Item: Hashable {
     var title: String
 }
 ```
->It is recommend to conform the item to `Identifiable` because the app crashes if there are duplicates in the data source!
+> It is recommend to conform the item to `Identifiable` because the app crashes if there are duplicates in the data source!
 
 <br>
 
-These types can be used like that:
+These classes can be subclassed like that:
 
 ```swift
 class ViewController: FHDiffableTableViewController<Section, Item> {
     
+    override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
+        return { tableView, indexPath, item in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell?.textLabel?.text = item.title
+            return cell
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         applySnapshot([
             FHSection(
@@ -76,7 +89,9 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
     }
 }
 ```
->This is the most simple implementation of a FHDiffableTableViewController.
+
+> The cellProvider must be overwritten because the default implementation raises a fatal error.
+> Do not forget to register the cell before you call `applySnapshot(_:)` the first time!
 
 <br>
 
@@ -89,33 +104,13 @@ override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: Inde
 }
 ```
 
-### Customize Cells
-
-In order to use custom cells, the `cellProvider` property must be overwritten. This works exactly the same for table view and collection view.
-
-```swift
-override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
-    return { (tableView, indexPath, item) in
-        let cell = tableView.dequeueReusableCell(withIdentifier: "customCell", for: indexPath) as? CustomCell
-        cell?.textLabel?.text = item.title
-        return cell
-    }
-}
-```
-
-Do not forget to register the cell before you call `applySnapshot(_:)` the first time!
-
-```swift 
-tableView.register(CustomCell.self, forCellReuseIdentifier: "customCell")
-```
-
-### Customize Header and Footer Views (only collection view)
+### Customize Header and Footer Views (collection view only)
 
 In order to use custom header or footer views, the `supplementaryViewProvider` property must be overwritten.
 
 ```swift 
 override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Section, Item>.SupplementaryViewProvider? {
-    return { (collectionView, kind, indexPath) in
+    return { collectionView, kind, indexPath in
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "customHeader", for: indexPath) as? CustomHeader
         switch self.dataSource.snapshot().sectionIdentifiers[indexPath.section] {
         case .main:
@@ -128,7 +123,7 @@ override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Secti
 }
 ```
 
-Do not forget to register the cell before you call `applySnapshot(_:)` the first time!
+Do not forget to register the supplementary view before you call `applySnapshot(_:)` the first time!
 
 ```swift
 collectionView.register(CustomHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "customHeader")
@@ -152,7 +147,7 @@ class CustomDataSource: UITableViewDiffableDataSource<Section, Item> {
 }
 ```
 
->Use `UICollectionViewDiffableDataSource` for collection view.
+> Use `UICollectionViewDiffableDataSource` for collection view.
 
 So that it can be used in our view controller we have to create a lazy var of this and override the `dataSource` property with it.
 
@@ -176,12 +171,6 @@ snapshot.appendItems([Item(title: "Detail Item")], toSection: .detail)
 dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
 ```
 
-### init(layout:)
-
-The `FHDiffableCollectionViewController` has a custom initializer, which is based on an enum.
-This contains a case for `UICollectionViewFlowLayout`, for `UICollectionViewCompositionalLayout`, for a custom `UICollectionViewLayout` or a default case.
-
->The default case creates a compositional layout, which is only intended to be used for testing.
 
 ## License
 
