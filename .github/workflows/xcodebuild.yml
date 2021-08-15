@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos:
+  build-macos-catalyst:
     runs-on: macos-latest
     
     steps:
