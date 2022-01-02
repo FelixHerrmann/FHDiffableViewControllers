@@ -1,5 +1,4 @@
 import UIKit
-import FHExtensions
 
 /// A subclass of **UITableViewController** with diffable data source.
 open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {

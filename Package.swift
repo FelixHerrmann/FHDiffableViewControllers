@@ -14,15 +14,9 @@ let package = Package(
             name: "FHDiffableViewControllers",
             targets: ["FHDiffableViewControllers"]),
     ],
-    dependencies: [
-         .package(url: "https://github.com/FelixHerrmann/FHExtensions.git", from: "1.1.1"),
-    ],
     targets: [
         .target(
-            name: "FHDiffableViewControllers",
-            dependencies: [
-                .product(name: "FHExtensions", package: "FHExtensions")
-            ]),
+            name: "FHDiffableViewControllers"),
         .testTarget(
             name: "FHDiffableViewControllersTests",
             dependencies: ["FHDiffableViewControllers"]),
