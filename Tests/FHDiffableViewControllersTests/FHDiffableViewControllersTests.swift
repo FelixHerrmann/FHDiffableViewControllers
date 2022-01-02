@@ -1,36 +1,6 @@
 import XCTest
 @testable import FHDiffableViewControllers
 
-final class TableViewController: FHDiffableTableViewController<Int, String> {
-    
-    override var cellProvider: UITableViewDiffableDataSource<Int, String>.CellProvider {
-        return { tableView, indexPath, string in
-            return tableView.dequeueReusableCell(withIdentifier: "testCell", for: indexPath)
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "testCell")
-    }
-}
-
-final class CollectionViewController: FHDiffableCollectionViewController<Int, String> {
-    
-    override var cellProvider: UICollectionViewDiffableDataSource<Int, String>.CellProvider {
-        return { collectionView, indexPath, string in
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "testCell", for: indexPath)
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "testCell")
-    }
-}
-
 final class FHDiffableViewControllersTests: XCTestCase {
     
     func testTableView() {
