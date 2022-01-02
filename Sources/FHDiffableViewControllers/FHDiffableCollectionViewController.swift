@@ -1,3 +1,10 @@
+//
+//  FHDiffableCollectionViewController.swift
+//  FHDiffableViewControllers
+//
+//  Created by Felix Herrmann on 10.06.20.
+//
+
 import UIKit
 
 /// A subclass of **UICollectionViewController** with diffable data source.

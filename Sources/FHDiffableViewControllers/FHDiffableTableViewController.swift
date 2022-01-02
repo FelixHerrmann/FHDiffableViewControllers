@@ -1,3 +1,10 @@
+//
+//  FHDiffableTableViewController.swift
+//  FHDiffableViewControllers
+//
+//  Created by Felix Herrmann on 09.06.20.
+//
+
 import UIKit
 
 /// A subclass of **UITableViewController** with diffable data source.
