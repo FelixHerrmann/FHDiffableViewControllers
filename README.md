@@ -73,19 +73,13 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
         applySnapshot([
-            FHSection(
-                sectionIdentifier: .main,
-                itemIdentifiers: [
-                    Item(title: "First Item"),
-                    Item(title: "Second Item")
-                ]
-            ),
-            FHSection(
-                sectionIdentifier: .detail,
-                itemIdentifiers: [
-                    Item(title: "Third Item")
-                ]
-            )
+            FHSection(.main, items: [
+                Item(title: "First Item"),
+                Item(title: "Second Item")
+            ]),
+            FHSection(.detail, items: [
+                Item(title: "Third Item")
+            ]),
         ], animatingDifferences: false)
     }
 }

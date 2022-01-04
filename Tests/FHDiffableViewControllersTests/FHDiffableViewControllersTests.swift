@@ -13,8 +13,8 @@ final class FHDiffableViewControllersTests: XCTestCase {
     func testTableView() {
         let tableViewController = TableViewController()
         tableViewController.applySnapshot([
-            .init(sectionIdentifier: 0, itemIdentifiers: ["a", "b"]),
-            .init(sectionIdentifier: 1, itemIdentifiers: ["c", "d"])
+            TableViewController.FHSection(0, items: ["a", "b"]),
+            TableViewController.FHSection(1, items: ["c", "d"])
         ], animatingDifferences: false)
         
         let a = tableViewController.dataSource.itemIdentifier(for: [0, 0])
@@ -26,8 +26,8 @@ final class FHDiffableViewControllersTests: XCTestCase {
     func testCollectionView() {
         let collectionViewController = CollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
         collectionViewController.applySnapshot([
-            .init(sectionIdentifier: 0, itemIdentifiers: ["a", "b"]),
-            .init(sectionIdentifier: 1, itemIdentifiers: ["c", "d"])
+            CollectionViewController.FHSection(0, items: ["a", "b"]),
+            CollectionViewController.FHSection(1, items: ["c", "d"])
         ], animatingDifferences: false)
         
         let a = collectionViewController.dataSource.itemIdentifier(for: [0, 0])

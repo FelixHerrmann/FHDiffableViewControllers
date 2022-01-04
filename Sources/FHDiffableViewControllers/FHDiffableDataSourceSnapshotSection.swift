@@ -21,7 +21,7 @@ public struct FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIde
     /// - Parameters:
     ///   - sectionIdentifier: The identifier of the section.
     ///   - itemIdentifiers: The identifiers from the section items.
-    public init(sectionIdentifier: SectionIdentifierType, itemIdentifiers: [ItemIdentifierType]) {
+    public init(_ sectionIdentifier: SectionIdentifierType, items itemIdentifiers: [ItemIdentifierType]) {
         self.sectionIdentifier = sectionIdentifier
         self.itemIdentifiers = itemIdentifiers
     }
