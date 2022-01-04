@@ -78,7 +78,7 @@ class TableViewController: FHDiffableTableViewController<Section, Item> {
         
         applySnapshot(animatingDifferences: false) {
             FHSection(.main) {
-                Item(title: "First Item"),
+                Item(title: "First Item")
                 Item(title: "Second Item")
             }
             FHSection(.detail) {
