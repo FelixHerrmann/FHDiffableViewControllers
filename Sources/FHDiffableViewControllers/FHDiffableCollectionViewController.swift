@@ -8,7 +8,7 @@
 import UIKit
 
 /// A subclass of **UICollectionViewController** with diffable data source.
-open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentifierType>: UICollectionViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
+open class FHDiffableCollectionViewController<SectionIdentifierType: Hashable, ItemIdentifierType: Hashable>: UICollectionViewController {
     
     
     // MARK: - Typealias

@@ -8,7 +8,7 @@
 import UIKit
 
 /// A subclass of **UITableViewController** with diffable data source.
-open class FHDiffableTableViewController<SectionIdentifierType, ItemIdentifierType>: UITableViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
+open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemIdentifierType: Hashable>: UITableViewController {
     
     
     // MARK: - Typealias
