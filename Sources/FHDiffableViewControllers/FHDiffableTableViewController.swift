@@ -22,6 +22,9 @@ open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemId
     /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
     public typealias FHSection = FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>
     
+    /// A typealias for ``FHDiffableDataSourceSnapshotSectionBuilder`` with the identifier types.
+    public typealias FHSectionBuilder = FHDiffableDataSourceSnapshotSectionBuilder<SectionIdentifierType, ItemIdentifierType>
+    
     
     // MARK: - Private Properties
     
@@ -94,5 +97,32 @@ open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemId
         sections.forEach { snapshot.appendItems($0.itemIdentifiers, toSection: $0.sectionIdentifier) }
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+    }
+    
+    /// This method applies a new snapshot build from a result builder to the table view.
+    ///
+    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
+    ///
+    /// ```swift
+    /// applySnapshot {
+    ///     FHSection(.main) {
+    ///         Item(title: "First")
+    ///         Item(title: "Second")
+    ///     }
+    ///     FHSection(.detail) {
+    ///         Item(title: "Third")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Note: For a different animation modify the `defaultRowAnimation` property on ``dataSource``.
+    /// - Important: All sections and all items per section must be unique.
+    ///
+    /// - Parameters:
+    ///   - animatingDifferences: If `true`, the system animates the updates to the table view. If `false`, the system doesn’t animate the updates to the table view.
+    ///   - sectionBuilder: The section builder to generate a snapshot for the ``dataSource``.
+    ///   - completion: An optional closure to execute when the animations are complete. The system calls this closure from the main queue.
+    open func applySnapshot(animatingDifferences: Bool = true, @FHSectionBuilder sectionBuilder: () throws -> [FHSection], completion: (() -> Void)? = nil) rethrows {
+        applySnapshot(try sectionBuilder(), animatingDifferences: animatingDifferences, completion: completion)
     }
 }
