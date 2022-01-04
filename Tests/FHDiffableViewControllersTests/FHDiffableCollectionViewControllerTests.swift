@@ -10,7 +10,7 @@ import XCTest
 
 final class FHDiffableCollectionViewControllerTests: XCTestCase {
     
-    func testCollectionView() {
+    func testSnapshot() {
         let collectionViewController = CollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
         collectionViewController.applySnapshot([
             CollectionViewController.FHSection(0, items: ["a", "b"]),

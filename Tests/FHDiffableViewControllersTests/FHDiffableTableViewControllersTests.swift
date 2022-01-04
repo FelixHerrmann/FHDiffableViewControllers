@@ -10,7 +10,7 @@ import XCTest
 
 final class FHDiffableTableViewControllersTests: XCTestCase {
     
-    func testTableView() {
+    func testSnapshot() {
         let tableViewController = TableViewController()
         tableViewController.applySnapshot([
             TableViewController.FHSection(0, items: ["a", "b"]),
