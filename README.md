@@ -26,20 +26,24 @@ Add the following to the dependencies of your `Package.swift`:
 .package(url: "https://github.com/FelixHerrmann/FHDiffableViewControllers.git", from: "x.x.x")
 ```
 
+### Xcode
+
+Add the package to your project as shown [here](https://developer.apple.com/documentation/swift_packages/adding_package_dependencies_to_your_app).
+
 ### Manual
 
-Download the files in the [Sources](https://github.com/FelixHerrmann/FHDiffableViewControllers/tree/master/Sources) folder and drag them into you project.
+Download the files in the [Sources](/Sources) folder and drag them into you project.
 
 
 ## Usage
 
-If you are using Swift Package Manager, you have to import FHDiffableViewControllers to your file with `import FHDiffableViewControllers`. You can also import it globally with `@_exported import FHDiffableViewControllers`. (e.g. in `AppDelegate.swift`)
+If you are using Swift Package Manager, you have to import FHDiffableViewControllers to your file with `import FHDiffableViewControllers`.
 
 Now you can inherit your view controller class from `FHDiffableTableViewController` and `FHDiffableCollectionViewController`. 
 
 <br>
 
-But first we need a `SectionIdentifier` and `ItemIdentifier` which will be used for the generic types. Both types have to conform to `Hashable`.
+But first you need a `SectionIdentifier` and `ItemIdentifier` which will be used for the generic types. Both types have to conform to `Hashable`.
 
 ```swift
 enum Section {
@@ -57,7 +61,7 @@ struct Item: Hashable {
 These classes can be subclassed like that:
 
 ```swift
-class ViewController: FHDiffableTableViewController<Section, Item> {
+class TableViewController: FHDiffableTableViewController<Section, Item> {
     
     override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
         return { tableView, indexPath, item in
@@ -72,15 +76,15 @@ class ViewController: FHDiffableTableViewController<Section, Item> {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        applySnapshot([
-            FHSection(.main, items: [
+        applySnapshot(animatingDifferences: false) {
+            FHSection(.main) {
                 Item(title: "First Item"),
                 Item(title: "Second Item")
-            ]),
-            FHSection(.detail, items: [
+            }
+            FHSection(.detail) {
                 Item(title: "Third Item")
-            ]),
-        ], animatingDifferences: false)
+            }
+        }
     }
 }
 ```
@@ -166,7 +170,42 @@ snapshot.appendItems([Item(title: "Detail Item")], toSection: .detail)
 dataSource.apply(snapshot, animatingDifferences: true, completion: nil)
 ```
 
+### Section & Item builder
+
+In addition to the traditional Array way there is a result builder for both the Section's and Item's creation.
+
+<details>
+  <summary>Array</summary>
+
+  ```swift
+  applySnapshot([
+      FHSection(.main, items: [
+          Item(title: "First Item"),
+          Item(title: "Second Item"),
+      ]),
+      FHSection(.detail, items: [
+          Item(title: "Third Item"),
+      ]),
+  ])
+  ```
+</details>
+
+<details>
+  <summary>Result Builder</summary>
+
+  ```swift
+  applySnapshot {
+      FHSection(.main) {
+          Item(title: "First Item")
+          Item(title: "Second Item")
+      }
+      FHSection(.detail) {
+          Item(title: "Third Item")
+      }
+  }
+  ```
+</details>
 
 ## License
 
-FHConstraints is available under the MIT license. See the [LICENSE](https://github.com/FelixHerrmann/FHDiffableViewControllers/blob/master/LICENSE) file for more info.
+FHConstraints is available under the MIT license. See the [LICENSE](/LICENSE) file for more info.
