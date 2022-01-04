@@ -14,11 +14,10 @@ public struct FHDiffableDataSourceSnapshotSection<SectionIdentifierType: Hashabl
     /// The identifiers from the section items.
     public var itemIdentifiers: [ItemIdentifierType]
     
-    
-    /// Instantiates an instance of **FHDiffableDataSourceSnapshotSection**.
+    /// Instantiates an instance of ``FHDiffableDataSourceSnapshotSection``.
     /// - Parameters:
     ///   - sectionIdentifier: The identifier of the section.
-    ///   - itemIdentifiers: The identifiers from the section items.
+    ///   - itemIdentifiers: The identifiers from the section's items.
     public init(_ sectionIdentifier: SectionIdentifierType, items itemIdentifiers: [ItemIdentifierType]) {
         self.sectionIdentifier = sectionIdentifier
         self.itemIdentifiers = itemIdentifiers

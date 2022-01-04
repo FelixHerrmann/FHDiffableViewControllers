@@ -7,19 +7,57 @@
 
 import UIKit
 
-/// A subclass of **UITableViewController** with diffable data source.
+/// A subclass of `UITableViewController` with diffable data source.
+///
+/// The most simple subclass could look like the following:
+/// ```swift
+/// enum Section {
+///     case main, detail
+/// }
+///
+/// struct Item: Hashable {
+///     var title: String
+/// }
+///
+/// class TableViewController: FHDiffableTableViewController<Section, Item> {
+///
+///     override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
+///         return { tableView, indexPath, item in
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+///             cell.textLabel?.text = item.title
+///             return cell
+///         }
+///     }
+///
+///     override func viewDidLoad() {
+///         super.viewDidLoad()
+///
+///         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+///
+///         applySnapshot(animatingDifferences: false) {
+///             FHSection(.main) {
+///                 Item(title: "First Item"),
+///                 Item(title: "Second Item")
+///             }
+///             FHSection(.detail) {
+///                 Item(title: "Third Item")
+///             }
+///         }
+///     }
+/// }
+/// ```
 open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemIdentifierType: Hashable>: UITableViewController {
     
     
     // MARK: - Typealias
     
-    /// A typealias for **UITableViewDiffableDataSource** with the identifier types.
+    /// A typealias for `UITableViewDiffableDataSource` with the identifier types.
     public typealias FHDataSource = UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **NSDiffableDataSourceSnapshot** with the identifier types.
+    /// A typealias for `NSDiffableDataSourceSnapshot` with the identifier types.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
+    /// A typealias for ``FHDiffableDataSourceSnapshotSection`` with the identifier types.
     public typealias FHSection = FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>
     
     /// A typealias for ``FHDiffableDataSourceSnapshotSectionBuilder`` with the identifier types.
@@ -57,7 +95,7 @@ open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemId
     
     /// The data source for the table view.
     ///
-    /// Override this property only if a custom **UITableViewDiffableDataSource** should be applied.
+    /// Override this property only if a custom `UITableViewDiffableDataSource` should be applied.
     /// For cell configuration override the ``cellProvider`` property.
     ///
     /// ```swift
@@ -78,18 +116,16 @@ open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemId
     
     /// This method applies a new snapshot to the table view.
     ///
-    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`
+    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
+    /// There is also ``applySnapshot(animatingDifferences:sectionBuilder:completion:)`` with a result builder.
     ///
-    /// For a different animation this property needs to be modified:
-    ///
-    /// ```swift
-    /// dataSource.defaultRowAnimation = .automatic
-    /// ```
+    /// - Note: For a different animation modify the `defaultRowAnimation` property on ``dataSource``.
+    /// - Important: All sections and all items per section must be unique.
     ///
     /// - Parameters:
-    ///   - sections: The sections for the table view.
-    ///   - animatingDifferences: A boolean value to deactivate the animation. Default value is `true`.
-    ///   - completion: The completion block for when the update is finished. Default value is `nil`.
+    ///   - sections: The sections to generate a snapshot for the ``dataSource``.
+    ///   - animatingDifferences: If `true`, the system animates the updates to the table view. If `false`, the system doesn’t animate the updates to the table view.
+    ///   - completion: An optional closure to execute when the animations are complete. The system calls this closure from the main queue.
     open func applySnapshot(_ sections: [FHSection], animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = FHSnapshot()
         
