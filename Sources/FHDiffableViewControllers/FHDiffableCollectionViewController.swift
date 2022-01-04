@@ -7,20 +7,71 @@
 
 import UIKit
 
-/// A subclass of **UICollectionViewController** with diffable data source.
-open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentifierType>: UICollectionViewController where SectionIdentifierType: Hashable, ItemIdentifierType: Hashable {
+/// A subclass of `UICollectionViewController` with diffable data source.
+///
+/// The most simple subclass could look like the following:
+/// ```swift
+/// enum Section {
+///     case main, detail
+/// }
+///
+/// struct Item: Hashable {
+///     var title: String
+/// }
+///
+/// class CollectionViewController: FHDiffableCollectionViewController<Section, Item> {
+///
+///     override var cellProvider: UITableViewDiffableDataSource<Section, Item>.CellProvider {
+///         return { collectionView, indexPath, item in
+///             return collectionView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+///         }
+///     }
+///
+///     override var supplementaryViewProvider: UICollectionViewDiffableDataSource<Section, Item>.SupplementaryViewProvider? {
+///         return { collectionView, kind, indexPath in
+///             switch kind {
+///             case UICollectionView.elementKindSectionHeader:
+///                 return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath)
+///             default:
+///                 return nil
+///             }
+///         }
+///     }
+///
+///     override func viewDidLoad() {
+///         super.viewDidLoad()
+///
+///         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+///         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "heder")
+///
+///         applySnapshot(animatingDifferences: false) {
+///             FHSection(.main) {
+///                 Item(title: "First Item"),
+///                 Item(title: "Second Item")
+///             }
+///             FHSection(.detail) {
+///                 Item(title: "Third Item")
+///             }
+///         }
+///     }
+/// }
+/// ```
+open class FHDiffableCollectionViewController<SectionIdentifierType: Hashable, ItemIdentifierType: Hashable>: UICollectionViewController {
     
     
     // MARK: - Typealias
     
-    /// A typealias for **UICollectionViewDiffableDataSource** with the identifier types.
+    /// A typealias for `UICollectionViewDiffableDataSource` with the identifier types.
     public typealias FHDataSource = UICollectionViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **NSDiffableDataSourceSnapshot** with the identifier types.
+    /// A typealias for `NSDiffableDataSourceSnapshot` with the identifier types.
     public typealias FHSnapshot = NSDiffableDataSourceSnapshot<SectionIdentifierType, ItemIdentifierType>
     
-    /// A typealias for **FHDiffableDataSourceSnapshotSection** with the identifier types.
+    /// A typealias for ``FHDiffableDataSourceSnapshotSection`` with the identifier types.
     public typealias FHSection = FHDiffableDataSourceSnapshotSection<SectionIdentifierType, ItemIdentifierType>
+    
+    /// A typealias for ``FHDiffableDataSourceSnapshotSectionBuilder`` with the identifier types.
+    public typealias FHSectionBuilder = FHDiffableDataSourceSnapshotSectionBuilder<SectionIdentifierType, ItemIdentifierType>
     
     
     // MARK: - Private Properties
@@ -79,7 +130,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     /// The data source for the collection view.
     ///
-    /// Override this property only if a custom **UICollectionViewDiffableDataSource** should be applied.
+    /// Override this property only if a custom `UICollectionViewDiffableDataSource` should be applied.
     /// For cell configuration override the ``cellProvider`` property.
     /// For supplementary view configuration override the ``supplementaryViewProvider`` property.
     ///
@@ -103,14 +154,17 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
     
     // MARK: - Public Methods
     
-    /// This method applies a new snapshot to the collection view.
+    /// This method applies a new snapshot to the collectiion view.
     ///
     /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
+    /// There is also ``applySnapshot(animatingDifferences:sectionBuilder:completion:)`` with a result builder.
+    ///
+    /// - Important: All sections and all items per section must be unique.
     ///
     /// - Parameters:
-    ///   - sections: The sections for the collection view.
-    ///   - animatingDifferences: A boolean value to deactivate the animation. Default value is `true`.
-    ///   - completion: The completion block for when the update is finished. Default value is `nil`.
+    ///   - sections: The sections to generate a snapshot for the ``dataSource``.
+    ///   - animatingDifferences: If `true`, the system animates the updates to the collection view. If `false`, the system doesn’t animate the updates to the collection view.
+    ///   - completion: An optional closure to execute when the animations are complete. The system calls this closure from the main queue.
     open func applySnapshot(_ sections: [FHSection], animatingDifferences: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = FHSnapshot()
         
@@ -118,5 +172,31 @@ open class FHDiffableCollectionViewController<SectionIdentifierType, ItemIdentif
         sections.forEach { snapshot.appendItems($0.itemIdentifiers, toSection: $0.sectionIdentifier) }
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+    }
+    
+    /// This method applies a new snapshot build from a result builder to the collection view.
+    ///
+    /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
+    ///
+    /// ```swift
+    /// applySnapshot {
+    ///     FHSection(.main) {
+    ///         Item(title: "First")
+    ///         Item(title: "Second")
+    ///     }
+    ///     FHSection(.detail) {
+    ///         Item(title: "Third")
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// - Important: All sections and all items per section must be unique.
+    ///
+    /// - Parameters:
+    ///   - animatingDifferences: If `true`, the system animates the updates to the collection view. If `false`, the system doesn’t animate the updates to the collection view.
+    ///   - sectionBuilder: The section builder to generate a snapshot for the ``dataSource``.
+    ///   - completion: An optional closure to execute when the animations are complete. The system calls this closure from the main queue.
+    open func applySnapshot(animatingDifferences: Bool = true, @FHSectionBuilder sectionBuilder: () throws -> [FHSection], completion: (() -> Void)? = nil) rethrows {
+        applySnapshot(try sectionBuilder(), animatingDifferences: animatingDifferences, completion: completion)
     }
 }
