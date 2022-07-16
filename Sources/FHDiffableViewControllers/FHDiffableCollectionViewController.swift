@@ -42,7 +42,7 @@ import UIKit
 ///         super.viewDidLoad()
 ///
 ///         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-///         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "heder")
+///         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
 ///
 ///         applySnapshot(animatingDifferences: false) {
 ///             FHSection(.main) {
@@ -89,7 +89,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType: Hashable, I
     ///
     /// Override this property to configure a custom cell.
     ///
-    /// There is no default implemenation for this property.
+    /// There is no default implementation for this property.
     /// It will raise a fatal error if you don't override it like the following:
     ///
     /// ```swift
@@ -154,7 +154,7 @@ open class FHDiffableCollectionViewController<SectionIdentifierType: Hashable, I
     
     // MARK: - Public Methods
     
-    /// This method applies a new snapshot to the collectiion view.
+    /// This method applies a new snapshot to the collection view.
     ///
     /// This is the equivalent for `reloadData()` or `performBatchUpdates(_:)`.
     /// There is also ``applySnapshot(animatingDifferences:sectionBuilder:completion:)`` with a result builder.

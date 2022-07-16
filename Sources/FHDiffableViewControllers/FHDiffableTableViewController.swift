@@ -75,7 +75,7 @@ open class FHDiffableTableViewController<SectionIdentifierType: Hashable, ItemId
     ///
     /// Override this property to configure a custom cell.
     ///
-    /// There is no default implemenation for this property.
+    /// There is no default implementation for this property.
     /// It will raise a fatal error if you don't override it like the following:
     ///
     /// ```swift
